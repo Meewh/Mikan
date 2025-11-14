@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>eMercado - Todo lo que busques está aquí</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,300i,400,400i,700,700i,900,900i" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- ================== HEADER ================== -->
+    <header>
+        <!-- ================ NAV ================== -->
+        <nav>
+            <div class="logo">
+                <a href="index.html"></a>
+            </div>
+
+            <!-- ================ LINKS PRINCIPALES ================== -->
+            <ul class="nav-links">
+                <!-- A TENER EN CUENTA LAS CLASES Y SUS USOS:
+            .navbar---------Contenedor principal del nav
+            .logo-----------Contiene logo y link del sitio (inicio)
+            .nav-links------Enlaces principales del nav
+            .nav-actions----Botones o formularios del usuario
+            .btn-icon-------Cualquier botón que solo tenga ícono
+            .btn-cta--------Botones “Call To Action” (por ejemplo: “Suscribirse”, “Explorar productos”-->
+
+                <!-- Mantener los <svg> recogidos para que quede mas organizado por favor-->
+                <!-- Todos los SVG corresponden al icono que pertenece el codigo -->
+
+
+                <!-- Inicio -->
+                <li>
+                    <a href="index.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-house-icon lucide-house">
+                            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+                            <path
+                                d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        </svg>
+                        Inicio
+                    </a>
+                </li>
+
+                <!-- Categorias -->
+                <li>
+                    <a href="categories.html">
+                        Categorías
+                    </a>
+                </li>
+
+                <!-- Ayuda -->
+                <li>
+                    <a href="help.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-heart-handshake-icon lucide-heart-handshake">
+                            <path
+                                d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762" />
+                        </svg>
+                        Ayuda
+                    </a>
+                </li>
+
+                <!-- Sobre nosotros -->
+                <li>
+                    <a href="about.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-message-circle-question-mark-icon lucide-message-circle-question-mark">
+                            <path
+                                d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                            <path d="M12 17h.01" />
+                        </svg>
+                        Sobre Nosotros
+                    </a>
+                </li>
+            </ul>
+
+
+            <!-- ACCIONES DEL USUARIO -->
+
+            <ul class="nav-actions">
+                <!-- Botón del buscador -->
+                <li class="nav-search">
+                    <form method="get" action="/buscar">
+                        <input type="search" id="search-input" name="q" placeholder="Buscar">
+                        <button type="submit" class="btn-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-search-icon lucide-search">
+                                <path d="m21 21-4.34-4.34" />
+                                <circle cx="9.5" ircle cx="11" cy="11" r="8" />
+                            </svg>
+                        </button>
+                    </form>
+                </li>
+
+                <!-- Botón de favoritos -->
+                <li>
+                    <a href="favorites.html" class="btn-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-heart-icon lucide-heart">
+                            <path
+                                d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
+                        </svg>
+                    </a>
+                </li>
+
+                <!-- Botón del carrito -->
+                <li>
+                    <a href="cart.html" class="btn-icon">
+                        <!-- Este botón mostraria una ventana al costado con los items -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-shopping-cart-icon lucide-shopping-cart">
+                            <circle cx="8" cy="21" r="1" />
+                            <circle cx="19" cy="21" r="1" />
+                            <path
+                                d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Botón de perfil -->
+            <div class="profile-menu-container">
+                <button id="btn-profile" class="btn-icon">
+                    <ul id="menu-profile">
+                        <li><a href="my-profile.html">Mi Perfil</a></li>
+                        <li><a href="config.html">Configuracion</a></li>
+                        <li>
+                            <p>Aqui va el botón Cerrar Sesión</p>
+                        </li>
+                    </ul>
+                </button>
+            </div>
+        </nav>
+        <!-- ================ /NAV ================== -->
+    </header>
+    <!-- ================ /HEADER ================== -->
+    <main>
+        <!-- ================ NUEVO Y OFERTA================== 
+    Sección de productos destacados
+    Contiene tarjetas con imagen, nombre y descripción corta.
+    Se llena dinámicamente desde index.js-->
+        <section class="cat-banner">
+        </section>
+        <!-- ================ /FIN================== -->
+
+        <!-- ================ HISTORIAL Y ME GUSTA ================== 
+    Sección de productos recomendados en base a lo que viste, descuentos a items dentro del carrito y me gusta
+    Contiene tarjetas con imagen, nombre y descripción corta.
+    Se llena dinámicamente desde index.js-->
+        <section class="cat-recomendados">
+        </section>
+        <!-- ================ /FIN ================== -->
+
+        <!-- ================ POPULAR Y TOP VENTAS ================== 
+    Sección de productos populares y top ventas
+    Contiene tarjetas con imagen, nombre y descripción corta.
+    Se llena dinámicamente desde index.js-->
+        <section class="cat-destacados">
+        </section>
+        <!-- ================ /FIN ================== -->
+
+        <!-- ================ BOLETIN ================== 
+    Sección para suscribirse al boletin de promociones y novedades
+        Se llena dinámicamente desde index.js-->
+        <section class="sub">
+        </section>
+        <!-- ================ /FIN ================== -->
+    </main>
+    <!-- ================ PARTE DERECHOS AUTORALES ================== -->
+    <footer class="text-muted">
+        <div class="container">
+            <p class="float-end">
+                <a href="#">Volver arriba</a>
+            </p>
+            <small>Este sitio forma parte de ©<a href="https://jovenesaprogramar.edu.uy/" target="_blank">Jovenes a
+                    Programar</a></small>
+        </div>
+    </footer>
+    <!-- ================ /FIN ================== -->
+
+    <!-- ================ JAVASCRIPT ================== -->
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/init.js"></script>
+    <!-- ================ /FIN ================== -->
+</body>
+
+</html>
