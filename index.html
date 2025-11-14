@@ -31,129 +31,176 @@
 
 <body class="bg-page-light text-page-text font-display">
 
-  <!-- HEADER / NAV -->
-  <header class="site-header">
-    <div class="nav-inner">
-      <!-- left: logo + main links -->
-      <div class="nav-left">
-        <a href="index.html" class="brand">
-          <img src="img/Logo.png" alt="Logo" class="brand-logo">
-          <span class="brand-title">eMercado</span>
-        </a>
-
-        <nav class="main-links" aria-label="Navegación principal">
-          <a href="index.html">Inicio</a>
-          <a href="categories.html">Categorías</a>
-          <a href="help.html">Ayuda</a>
-          <a href="about.html">Sobre Nosotros</a>
-        </nav>
-      </div>
-
-      <!-- right: search, fav, cart, profile -->
-      <div class="nav-right">
-        <!-- Search (stitch-like) -->
-        <div class="search-wrap" role="search">
-          <span class="material-symbols-outlined search-icon" aria-hidden="true">search</span>
-          <input id="search-input" class="search-input" type="search" placeholder="Buscar productos, marcas..."
-            aria-label="Buscar">
+    <!-- NAVEGACIÓN DESKTOP -->
+    <nav class="nav-desktop">
+      <div class="nav-inner">
+        <div class="nav-left">
+          <a href="#" class="brand">
+            <img src="https://via.placeholder.com/42" alt="Logo" class="brand-logo">
+            <span>eMercado</span>
+          </a>
+    
+          <div class="nav-links">
+            <a href="#">Inicio</a>
+            <a href="#">Categorías</a>
+            <a href="#">Ayuda</a>
+            <a href="#">Sobre Nosotros</a>
+          </div>
         </div>
-
-        <!-- Favorites -->
-        <button id="btn-fav" class="icon-btn" title="Favoritos" aria-label="Favoritos">
-          <span id="fav-icon" class="material-symbols-outlined">favorite_border</span>
-        </button>
-
-        <!-- Cart -->
-        <a id="cart-link" href="cart.html" class="icon-btn cart-btn" title="Carrito" aria-label="Carrito">
-          <span class="material-symbols-outlined">shopping_cart</span>
-          <span id="cart-count" class="badge">0</span>
-        </a>
-
-        <!-- Profile -->
-        <div class="profile-wrap">
-          <button id="btn-profile" class="profile-btn" aria-haspopup="true" aria-expanded="false">
-            <!-- content replaced by JS with photo or fallback icon -->
-            <span class="material-symbols-outlined profile-fallback">person</span>
-            <span id="nombre-usuario" class="profile-name">Mi Perfil</span>
-            <span class="material-symbols-outlined caret">expand_more</span>
+    
+        <div class="nav-right">
+          <!-- Buscador con botón -->
+          <div class="search-container" id="search-container">
+            <button class="search-toggle" id="search-toggle" aria-label="Buscar">
+              <span class="material-symbols-outlined">search</span>
+            </button>
+            <div class="search-input-wrapper">
+              <input type="search" id="search-input" placeholder="Buscar productos..." aria-label="Buscar productos">
+            </div>
+          </div>
+    
+          <!-- Accesibilidad -->
+          <button class="icon-btn" id="accessibility-btn" title="Accesibilidad" aria-label="Opciones de accesibilidad">
+            <span class="material-symbols-outlined">accessibility</span>
           </button>
-
-          <ul id="menu-profile" class="profile-menu" role="menu" aria-hidden="true">
-            <!-- menu items injected by nav.js -->
-          </ul>
+    
+          <!-- Modo oscuro -->
+          <button class="icon-btn" id="dark-mode-btn" title="Modo oscuro" aria-label="Cambiar tema">
+            <span class="material-symbols-outlined">dark_mode</span>
+          </button>
+    
+          <!-- Favoritos -->
+          <button class="icon-btn" id="fav-btn" title="Favoritos" aria-label="Favoritos">
+            <span class="material-symbols-outlined" id="fav-icon">favorite_border</span>
+          </button>
+    
+          <!-- Carrito -->
+          <button class="icon-btn" title="Carrito" aria-label="Carrito">
+            <span class="material-symbols-outlined">shopping_cart</span>
+            <span class="badge" id="cart-count">0</span>
+          </button>
+    
+          <!-- Perfil -->
+          <div style="position: relative;">
+            <button class="profile-btn" id="profile-btn" aria-haspopup="true">
+              <span class="material-symbols-outlined">person</span>
+              <span id="user-name">Mi Perfil</span>
+              <span class="material-symbols-outlined" style="font-size: 18px;">expand_more</span>
+            </button>
+            <ul class="profile-menu" id="profile-menu" role="menu">
+              <li><a href="#">Mi Perfil</a></li>
+              <li><a href="#">Configuración</a></li>
+              <li><button id="logout-btn">Cerrar sesión</button></li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
-  </header>
-
-  <!-- MAIN -->
-  <main class="page-main">
-    <div class="container">
-
-      <!-- Hero / Banner: reemplaza cover grande por sección con CTA -->
-      <section class="hero">
-        <div class="hero-content">
-          <h1>Bienvenido a eMercado</h1>
-          <p>Descubre novedades, ofertas y los más vendidos en un solo lugar.</p>
-          <a href="categories.html" class="btn-primary">Explorar productos</a>
+    </nav>
+    
+    <!-- NAVEGACIÓN MÓVIL -->
+    <nav class="nav-mobile">
+      <div class="nav-mobile-top">
+        <a href="#" class="brand">
+          <img src="https://via.placeholder.com/42" alt="Logo" class="brand-logo">
+          <span>eMercado</span>
+        </a>
+    
+        <div style="display: flex; gap: 8px;">
+          <button class="icon-btn" id="mobile-search-btn">
+            <span class="material-symbols-outlined">search</span>
+          </button>
+          <button class="icon-btn">
+            <span class="material-symbols-outlined">help</span>
+          </button>
+          <button class="icon-btn">
+            <span class="material-symbols-outlined">info</span>
+          </button>
         </div>
-      </section>
-
-      <!-- Destacados: carrusel horizontal -->
+      </div>
+    
+      <div class="nav-mobile-bottom">
+        <button class="icon-btn">
+          <span class="material-symbols-outlined">home</span>
+          Inicio
+        </button>
+        <button class="icon-btn">
+          <span class="material-symbols-outlined">category</span>
+          Categorías
+        </button>
+        <button class="icon-btn">
+          <span class="material-symbols-outlined">shopping_cart</span>
+          Carrito
+        </button>
+        <button class="icon-btn">
+          <span class="material-symbols-outlined">favorite_border</span>
+          Favoritos
+        </button>
+        <button class="icon-btn">
+          <span class="material-symbols-outlined">person</span>
+          Perfil
+        </button>
+      </div>
+    </nav>
+    
+    <!-- CARRUSEL HERO -->
+    <section class="hero-carousel">
+      <div class="carousel-slide active"
+        style="background-image: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1600');">
+        <div class="carousel-content">
+          <h1>Vacaciones en la Playa</h1>
+          <p>Encuentra todo lo que necesitas para disfrutar del verano</p>
+          <button class="carousel-btn">Explorar Ahora</button>
+        </div>
+      </div>
+    
+      <div class="carousel-slide"
+        style="background-image: url('https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=1600');">
+        <div class="carousel-content">
+          <h1>Refrescante para el Verano</h1>
+          <p>Productos ideales para mantenerte fresco todo el día</p>
+          <button class="carousel-btn">Ver Colección</button>
+        </div>
+      </div>
+    
+      <div class="carousel-slide"
+        style="background-image: url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1600');">
+        <div class="carousel-content">
+          <h1>Juegos para en Casa</h1>
+          <p>Diversión garantizada sin salir de tu hogar</p>
+          <button class="carousel-btn">Descubrir Más</button>
+        </div>
+      </div>
+    
+      <button class="carousel-arrow prev" id="prev-slide" aria-label="Anterior">
+        <span class="material-symbols-outlined">chevron_left</span>
+      </button>
+      <button class="carousel-arrow next" id="next-slide" aria-label="Siguiente">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </button>
+    
+      <div class="carousel-nav">
+        <button class="carousel-dot active" data-slide="0"></button>
+        <button class="carousel-dot" data-slide="1"></button>
+        <button class="carousel-dot" data-slide="2"></button>
+      </div>
+    </section>
+    
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="container">
+    
+      <!-- CATEGORÍAS POPULARES -->
       <section class="section">
-        <h2>Productos destacados</h2>
-        <div id="destacados-container" class="horizontal-list hide-scroll"></div>
+        <h2 class="section-title">Categorías Populares</h2>
+        <div class="categories-grid" id="categories-container">
+          <!-- Se llenará dinámicamente -->
+        </div>
       </section>
-
-      <!-- Recomendados -->
+    
+      <!-- PRODUCTOS DESTACADOS -->
       <section class="section">
-        <h2>Recomendados para ti</h2>
-        <div id="recomendados-container" class="horizontal-list hide-scroll"></div>
+        <h2 class="section-title">Productos Destacados</h2>
+        <div id="featured-products" class="horizontal-list hide-scroll"></div>
       </section>
-
-      <!-- Más vendidos / Novedades / Ofertas -->
-      <section class="section grid-triple">
-        <div>
-          <h3>Novedades</h3>
-          <div id="novedades-container" class="grid-cards"></div>
-        </div>
-        <div>
-          <h3>Ofertas</h3>
-          <div id="ofertas-container" class="grid-cards"></div>
-        </div>
-        <div>
-          <h3>Más vendidos</h3>
-          <div id="masvendidos-container" class="grid-cards"></div>
-        </div>
-      </section>
-
-      <!-- Categorías -->
-      <section class="section">
-        <h2>Categorías populares</h2>
-        <div id="categories-container" class="categories-grid"></div>
-      </section>
-
-    </div>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-    <div>© eMercado — Proyecto JAP</div>
-  </footer>
-
-  <!-- MikanBot (fijo abajo derecha) -->
-  <button id="chatbot-btn" class="mikan-btn" aria-label="Abrir chat">
-    <img src="img/MikanClosed.png" alt="Chat Mikan">
-  </button>
-
-  <div id="chatbot-box" class="chatbot-box" aria-hidden="true">
-    <div id="chatbot-header">Mikan Asistente<br><span class="sub">Preguntas frecuentes</span></div>
-    <div id="chatbot-messages" class="chatbot-messages"></div>
-    <div id="chatbot-input" class="chatbot-input">
-      <input id="chat-input" type="text" placeholder="Escribe tu mensaje...">
-      <button id="chat-send">Enviar</button>
-    </div>
-  </div>
 
   <!-- Scripts -->
   <script src="js/nav.js" defer></script>

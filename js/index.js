@@ -1,149 +1,208 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* =============================================================
-     API HELPERS
-  ============================================================= */
+  /* =====================================================================================
+     HELPERS API
+  ===================================================================================== */
 
-  async function obtenerCategorias() {
-    const res = await fetch("https://japceibal.github.io/emercado-api/cats/cat.json");
-    return await res.json();
-  }
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.carousel-dot');
+    const totalSlides = slides.length;
 
-  async function obtenerProductosDeCategoria(catID) {
-    const res = await fetch(`https://japceibal.github.io/emercado-api/cats_products/${catID}.json`);
-    const data = await res.json();
-    return data.products;
-  }
-
-  /* =============================================================
-     MÁS VENDIDOS (con CACHE 24H)
-  ============================================================= */
-
-  async function calcularMasVendidos() {
-    const categorias = await obtenerCategorias();
-    const top3 = categorias.slice(0, 3); // top 3 primeras categorías
-
-    let productos = [];
-
-    for (const cat of top3) {
-      const prods = await obtenerProductosDeCategoria(cat.id);
-      productos = productos.concat(prods);
+    function showSlide(index) {
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+      });
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+      currentSlide = index;
     }
 
-    productos.sort((a, b) => b.soldCount - a.soldCount);
-
-    return productos.slice(0, 10); // quedate con los 10 más vendidos
-  }
-
-  function cacheVigente(timestamp) {
-    const MS_24H = 24 * 60 * 60 * 1000;
-    return Date.now() - timestamp < MS_24H;
-  }
-
-  async function obtenerMasVendidosConCache(force = false) {
-    const cache = JSON.parse(localStorage.getItem("masVendidosCache") || "null");
-
-    if (!force && cache && cacheVigente(cache.timestamp)) {
-      return cache.data;
+    function nextSlide() {
+      showSlide((currentSlide + 1) % totalSlides);
     }
 
-    const nuevos = await calcularMasVendidos();
-
-    localStorage.setItem("masVendidosCache", JSON.stringify({
-      timestamp: Date.now(),
-      data: nuevos
-    }));
-
-    return nuevos;
-  }
-
-  /* =============================================================
-     RECOMENDADOS
-  ============================================================= */
-
-  async function obtenerRecomendados(masVendidos) {
-    const favs = JSON.parse(localStorage.getItem("favoritos") || "[]");
-
-    if (favs.length > 0) {
-      return masVendidos.filter(p => favs.includes(p.id)).slice(0, 6);
+    function prevSlide() {
+      showSlide((currentSlide - 1 + totalSlides) % totalSlides);
     }
 
-    return masVendidos.slice(0, 2); // fallback
-  }
+    document.getElementById('next-slide').addEventListener('click', nextSlide);
+    document.getElementById('prev-slide').addEventListener('click', prevSlide);
 
-  /* =============================================================
-     RENDERIZADO DE CARDS
-  ============================================================= */
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => showSlide(index));
+    });
 
-  function cardHorizontal(p) {
-    return `
+    // Auto-play
+    setInterval(nextSlide, 5000);
+
+    // BÚSQUEDA
+    const searchToggle = document.getElementById('search-toggle');
+    const searchContainer = document.getElementById('search-container');
+    const searchInput = document.getElementById('search-input');
+    
+    searchToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isExpanded = searchContainer.classList.contains('expanded');
+      
+      if (!isExpanded) {
+        searchContainer.classList.add('expanded');
+        setTimeout(() => searchInput.focus(), 400);
+      } else if (searchInput.value === '') {
+        searchContainer.classList.remove('expanded');
+      }
+    });
+
+    searchInput.addEventListener('blur', () => {
+      if (searchInput.value === '') {
+        setTimeout(() => {
+          searchContainer.classList.remove('expanded');
+        }, 200);
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!searchContainer.contains(e.target) && searchInput.value === '') {
+        searchContainer.classList.remove('expanded');
+      }
+    });
+
+    // MODO OSCURO
+    const darkModeBtn = document.getElementById('dark-mode-btn');
+    darkModeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      const icon = darkModeBtn.querySelector('.material-symbols-outlined');
+      icon.textContent = document.body.classList.contains('dark') ? 'light_mode' : 'dark_mode';
+    });
+
+    // FAVORITOS
+    const favBtn = document.getElementById('fav-btn');
+    const favIcon = document.getElementById('fav-icon');
+    let favActive = false;
+    
+    favBtn.addEventListener('click', () => {
+      favActive = !favActive;
+      favIcon.textContent = favActive ? 'favorite' : 'favorite_border';
+    });
+
+    // MENÚ PERFIL
+    const profileBtn = document.getElementById('profile-btn');
+    const profileMenu = document.getElementById('profile-menu');
+    
+    profileBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      profileMenu.classList.toggle('active');
+    });
+
+    document.addEventListener('click', () => {
+      profileMenu.classList.remove('active');
+    });
+
+    // CARGAR CATEGORÍAS
+    async function loadCategories() {
+      const res = await fetch('https://japceibal.github.io/emercado-api/cats/cat.json');
+      const categories = await res.json();
+      const container = document.getElementById('categories-container');
+      container.innerHTML = "";
+      
+      categories.forEach(cat => {
+        container.innerHTML += `
+          <div class="category-card">
+            <img src="img/cat${cat.id}_1.jpg" alt="${cat.name}">
+            <h3>${cat.name}</h3>
+          </div>
+        `;
+      });
+    }
+
+    // HELPERS API
+    async function obtenerCategorias() {
+      const res = await fetch("https://japceibal.github.io/emercado-api/cats/cat.json");
+      return await res.json();
+    }
+
+    async function obtenerProductosDeCategoria(catID) {
+      const res = await fetch(`https://japceibal.github.io/emercado-api/cats_products/${catID}.json`);
+      const data = await res.json();
+      return data.products;
+    }
+
+    async function obtenerComentarios(id) {
+      const res = await fetch(`https://japceibal.github.io/emercado-api/products_comments/${id}.json`);
+      return await res.json();
+    }
+
+    function obtenerCalificacion(comments) {
+      if (comments.length === 0) return 0;
+      let sum = 0;
+      comments.forEach(c => sum += c.score);
+      return Math.round(sum / comments.length);
+    }
+
+    function generarEstrellas(score) {
+      return "★".repeat(score) + "☆".repeat(5 - score);
+    }
+
+    // CALCULAR MÁS VENDIDOS - SOLO TOP 4
+    async function calcularMasVendidos() {
+      const categorias = await obtenerCategorias();
+      const top3 = categorias.slice(0, 3);
+
+      let productos = [];
+
+      for (const cat of top3) {
+        const prods = await obtenerProductosDeCategoria(cat.id);
+        productos = productos.concat(prods);
+      }
+
+      productos.sort((a, b) => b.soldCount - a.soldCount);
+
+      return productos.slice(0, 4);
+    }
+
+    // CARGAR PRODUCTOS DESTACADOS CON ESTILO STITCH
+// CARGAR PRODUCTOS DESTACADOS — ESTILO STITCH
+async function loadFeaturedProducts() {
+  const container = document.getElementById('featured-products');
+  container.innerHTML = "";
+
+  const top4 = await calcularMasVendidos();
+
+  for (const p of top4) {
+    const comentarios = await obtenerComentarios(p.id);
+    const rating = obtenerCalificacion(comentarios);
+    const estrellas = generarEstrellas(rating);
+
+    container.innerHTML += `
       <div class="product-card">
-        <div class="media" style="background-image:url('${p.image}');"></div>
-        <div class="title">${p.name}</div>
-        <div class="price">${p.currency} ${p.cost}</div>
-        <div class="sold">Vendidos: ${p.soldCount}</div>
+        <div class="product-image-wrapper">
+          <img class="product-image" src="${p.image}" alt="${p.name}">
+        </div>
+
+        <div class="product-info">
+          <h3 class="product-title">${p.name}</h3>
+          <p class="product-description">${p.description}</p>
+
+          <p class="product-price">${p.currency} ${p.cost}</p>
+
+          <p class="product-stats">Vendidos: ${p.soldCount}</p>
+
+          <div class="product-rating">
+            ${estrellas} 
+            <span class="product-rating-info">(${rating}/5)</span>
+          </div>
+        </div>
       </div>
     `;
   }
+}
 
-  function renderListaHorizontal(id, items) {
-    const cont = document.getElementById(id);
-    cont.innerHTML = items.map(cardHorizontal).join("");
-  }
+    // CARGAR AL INICIO
+    loadCategories();
+    loadFeaturedProducts();
 
-  /* =============================================================
-     BOTÓN "RECALCULAR"
-  ============================================================= */
-
-  const recalcularBtn = document.createElement("button");
-  recalcularBtn.textContent = "Recalcular ahora";
-  recalcularBtn.className = "btn-secondary";
-  recalcularBtn.style.marginBottom = "12px";
-
-  document.querySelector(".section h2").appendChild(recalcularBtn);
-
-  recalcularBtn.addEventListener("click", async () => {
-    recalcularBtn.textContent = "Recalculando...";
-    recalcularBtn.disabled = true;
-
-    const mv = await obtenerMasVendidosConCache(true);
-    renderListaHorizontal("destacados-container", mv);
-
-    recalcularBtn.textContent = "Recalcular ahora";
-    recalcularBtn.disabled = false;
-  });
-
-  /* =============================================================
-     INIT
-  ============================================================= */
-
-  async function init() {
-    const masVendidos = await obtenerMasVendidosConCache();
-    renderListaHorizontal("destacados-container", masVendidos);
-
-    const recomendados = await obtenerRecomendados(masVendidos);
-    renderListaHorizontal("recomendados-container", recomendados);
-
-    // Novedades y ofertas pueden eliminarse si ya no las usas
-  }
-
-  init();
-
-  /* =============================================================
-     CATEGORÍAS
-  ============================================================= */
-
-  fetch("https://japceibal.github.io/emercado-api/cats/cat.json")
-    .then(r => r.json())
-    .then(categories => {
-      const cont = document.getElementById("categories-container");
-      cont.innerHTML = "";
-      categories.forEach(cat => {
-        cont.innerHTML += `
-          <div class="category-card">
-            <img src="img/cat${cat.id}_1.jpg">
-            <h3>${cat.name}</h3>
-          </div>`;
-      });
-    });
+    // CART COUNT
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    document.getElementById('cart-count').textContent = cart.length;
 });
