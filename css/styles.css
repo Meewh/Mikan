@@ -1,23 +1,24 @@
-    :root {
-      --color-primary: #f3a9c6;
-      --color-primary-600: #e68fb8;
-      --bg: #f9f7fa;
-      --text: #1f1b24;
-      --muted: #6b5e66;
-      --surface: #ffffff;
-      --radius: 12px;
-      --shadow: 0 6px 18px rgba(31, 27, 36, 0.06);
-    }
+:root {
+  --color-primary: #d9a7e0;          /* Violeta rosado pastel */
+  --color-primary-600: #c68ecf;      /* Violeta más intenso */
+  --bg: #fdf8fc;                     /* Fondo rosado pastel muy suave */
+  --text: #1f1b24;                   /* Texto oscuro */
+  --muted: #7a6b80;                  /* Texto suave violeta gris */
+  --surface: #ffffff;                /* Superficies blancas */
+  --radius: 12px;
+  --shadow: 0 6px 18px rgba(31, 27, 36, 0.06);
+}
 
-    body.dark {
-      --color-primary: #cfa7e6;
-      --color-primary-600: #bea0d9;
-      --bg: #0f0c10;
-      --text: #efe9f3;
-      --muted: #bfb1c7;
-      --surface: #141018;
-      --shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
-    }
+body.dark {
+  --color-primary: #b996e6;          /* Violeta pastel suave */
+  --color-primary-600: #a983d8;
+  --bg: #11091a;                     /* Fondo violeta muy oscuro */
+  --text: #efe9f3;                   /* Texto claro lavanda */
+  --muted: #c8b7d8;                  /* Texto apagado lilac */
+  --surface: #1b0f25;                /* Tarjetas violeta profundo */
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
 
     * {
       box-sizing: border-box;
@@ -493,93 +494,7 @@
       justify-content: center;
     }
 
-    /* PRODUCTOS DESTACADOS - ESTILO STITCH */
-    .products-showcase {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
-    }
-
-    .product-card {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(8px);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: all 0.3s;
-      cursor: pointer;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .product-card:hover {
-      transform: translateY(-8px) scale(1.03);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .product-image-wrapper {
-      width: 100%;
-      height: 220px;
-      border-radius: 12px;
-      overflow: hidden;
-      background: linear-gradient(135deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.02));
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .product-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .product-info {
-      width: 100%;
-      text-align: center;
-    }
-
-    .product-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-
-    .product-description {
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 12px;
-      line-height: 1.4;
-    }
-
-    .product-price {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--color-primary-600);
-      margin-bottom: 8px;
-    }
-
-    .product-stats {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--color-primary-600);
-      margin-bottom: 8px;
-    }
-
-    .product-rating {
-      color: #FFB800;
-      font-weight: 700;
-      font-size: 1rem;
-    }
-
-    .product-rating-info {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-left: 4px;
-    }
-
+    
     /* RESPONSIVE */
     @media (max-width: 768px) {
       .nav-desktop {
@@ -642,3 +557,193 @@
         width: 260px;
       }
     }
+
+
+
+
+    featured-products {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+/* PANEL */
+.featured-panel {
+  position: relative;
+  width: 100%;
+  min-height: 90vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 60px 40px;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Capa oscura suave */
+.featured-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0,0,0,.25),
+    rgba(0,0,0,.55)
+  );
+}
+
+/* CONTENIDO INTERIOR */
+.panel-inner {
+  position: relative;
+  z-index: 10;
+  backdrop-filter: blur(6px);
+  background: rgba(255, 255, 255, 0.10);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 1300px;
+  width: 100%;
+  display: flex;
+  gap: 40px;
+  flex-direction: row;
+}
+
+/* Columna izquierda */
+.panel-left {
+  flex: 1;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  margin-bottom: 16px;
+}
+
+.desc {
+  font-size: 1.05rem;
+  line-height: 1.6rem;
+  color: #f8eafd;
+  margin-bottom: 20px;
+}
+
+/* Meta */
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.rating-stars {
+  font-size: 1.4rem;
+  color: var(--color-primary);
+}
+
+.rating-info {
+  font-size: 0.9rem;
+  color: #f2dfff;
+  opacity: 0.85;
+}
+
+.tag {
+  background: rgba(217, 167, 224, 0.28);
+  padding: 6px 10px;
+  border-radius: 12px;
+  color: #fff3ff;
+  font-size: 0.8rem;
+}
+
+/* Comentarios */
+.comments {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.comment {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: white;
+  font-size: 0.95rem;
+}
+
+.comment.muted {
+  opacity: 0.7;
+}
+
+/* Columna derecha */
+.panel-right {
+  flex: 0.8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+.secondary-img {
+  width: 340px;
+  height: 340px;
+  border-radius: 16px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: var(--shadow);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  padding: 14px 32px;
+  border-radius: 14px;
+  color: white;
+  font-weight: 700;
+  font-size: 1.15rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-600);
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 990px) {
+  .panel-inner {
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+
+  .secondary-img {
+    width: 260px;
+    height: 260px;
+  }
+}
+
+@media (max-width: 600px) {
+  .panel-inner {
+    padding: 24px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .secondary-img {
+    width: 200px;
+    height: 200px;
+  }
+}

@@ -1,208 +1,328 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =====================================================================================
+     CARRUSEL
+  ===================================================================================== */
+
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.carousel-slide');
+  const dots = document.querySelectorAll('.carousel-dot');
+  const totalSlides = slides.length;
+
+  function mostrarSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === index);
+    });
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === index);
+    });
+    currentSlide = index;
+  }
+
+  function siguienteSlide() {
+    mostrarSlide((currentSlide + 1) % totalSlides);
+  }
+
+  function anteriorSlide() {
+    mostrarSlide((currentSlide - 1 + totalSlides) % totalSlides);
+  }
+
+  document.getElementById('next-slide').addEventListener('click', siguienteSlide);
+  document.getElementById('prev-slide').addEventListener('click', anteriorSlide);
+
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => mostrarSlide(index));
+  });
+
+  setInterval(siguienteSlide, 5000);
+
+
+  /* =====================================================================================
+     BÚSQUEDA
+  ===================================================================================== */
+
+  const searchToggle = document.getElementById('search-toggle');
+  const searchContainer = document.getElementById('search-container');
+  const searchInput = document.getElementById('search-input');
+
+  searchToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const expanded = searchContainer.classList.contains('expanded');
+
+    if (!expanded) {
+      searchContainer.classList.add('expanded');
+      setTimeout(() => searchInput.focus(), 400);
+    } else if (searchInput.value === "") {
+      searchContainer.classList.remove('expanded');
+    }
+  });
+
+  searchInput.addEventListener('blur', () => {
+    if (searchInput.value === "") {
+      setTimeout(() => searchContainer.classList.remove('expanded'), 200);
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!searchContainer.contains(e.target) && searchInput.value === "") {
+      searchContainer.classList.remove('expanded');
+    }
+  });
+
+
+  /* =====================================================================================
+     MODO OSCURO
+  ===================================================================================== */
+
+  const darkModeBtn = document.getElementById('dark-mode-btn');
+
+  darkModeBtn.addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    const icon = darkModeBtn.querySelector('.material-symbols-outlined');
+    icon.textContent = document.body.classList.contains('dark')
+      ? "light_mode"
+      : "dark_mode";
+  });
+
+
+  /* =====================================================================================
+     FAVORITOS
+  ===================================================================================== */
+
+  const favBtn = document.getElementById('fav-btn');
+  const favIcon = document.getElementById('fav-icon');
+  let favActive = false;
+
+  favBtn.addEventListener('click', () => {
+    favActive = !favActive;
+    favIcon.textContent = favActive ? "favorite" : "favorite_border";
+  });
+
+
+  /* =====================================================================================
+     MENÚ PERFIL
+  ===================================================================================== */
+
+  const profileBtn = document.getElementById('profile-btn');
+  const profileMenu = document.getElementById('profile-menu');
+
+  profileBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    profileMenu.classList.toggle('active');
+  });
+
+  document.addEventListener('click', () => {
+    profileMenu.classList.remove('active');
+  });
+
+
+  /* =====================================================================================
      HELPERS API
   ===================================================================================== */
 
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.carousel-slide');
-    const dots = document.querySelectorAll('.carousel-dot');
-    const totalSlides = slides.length;
+  async function obtenerCategorias() {
+    const res = await fetch("https://japceibal.github.io/emercado-api/cats/cat.json");
+    return await res.json();
+  }
 
-    function showSlide(index) {
-      slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === index);
-      });
-      dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === index);
-      });
-      currentSlide = index;
+  async function obtenerProductosDeCategoria(catID) {
+    const res = await fetch(`https://japceibal.github.io/emercado-api/cats_products/${catID}.json`);
+    const data = await res.json();
+    return data.products;
+  }
+
+  async function obtenerComentarios(id) {
+    const res = await fetch(`https://japceibal.github.io/emercado-api/products_comments/${id}.json`);
+    return await res.json();
+  }
+
+  function obtenerCalificacion(comentarios) {
+    if (comentarios.length === 0) return 0;
+    let total = comentarios.reduce((acc, c) => acc + c.score, 0);
+    return Math.round(total / comentarios.length);
+  }
+
+  function generarEstrellas(score) {
+    return "★".repeat(score) + "☆".repeat(5 - score);
+  }
+
+
+  /* =====================================================================================
+     CALCULAR LOS 4 MÁS VENDIDOS
+  ===================================================================================== */
+
+  async function calcularMasVendidos() {
+    const categorias = await obtenerCategorias();
+    const top3 = categorias.slice(0, 3);
+
+    let productos = [];
+
+    for (const cat of top3) {
+      const prods = await obtenerProductosDeCategoria(cat.id);
+      productos = productos.concat(prods);
     }
 
-    function nextSlide() {
-      showSlide((currentSlide + 1) % totalSlides);
+    productos.sort((a, b) => b.soldCount - a.soldCount);
+
+    return productos.slice(0, 4);
+  }
+
+
+  /* =====================================================================================
+     PRODUCTOS DESTACADOS CON CACHÉ 24H
+  ===================================================================================== */
+
+  async function cargarProductosDestacados() {
+    const contenedor = document.getElementById("featured-products");
+    contenedor.innerHTML = "";
+
+    const imagenesFondo = [
+      "../img/productD1.jpg",
+      "../img/productD2.jpg",
+      "../img/productD3.jpg",
+      "../img/productD4.jpg"
+    ];
+
+    const CACHE_KEY = "destacados_cache_24h";
+
+    let productosTop4 = null;
+    const cache = localStorage.getItem(CACHE_KEY);
+
+    if (cache) {
+      const datos = JSON.parse(cache);
+      const tiempo = Date.now() - datos.timestamp;
+
+      if (tiempo < 24 * 60 * 60 * 1000) {
+        productosTop4 = datos.items;
+        const horas = Math.round(tiempo / 3600000);
+        document.getElementById("featured-cache-info").textContent =
+          `Calculado hace ${horas}h`;
+      }
     }
 
-    function prevSlide() {
-      showSlide((currentSlide - 1 + totalSlides) % totalSlides);
+    async function recalcular() {
+      const nuevos = await calcularMasVendidos();
+
+      for (const p of nuevos) {
+        const comentarios = await obtenerComentarios(p.id).catch(() => []);
+        p._comentarios = comentarios;
+        p._puntuacion = obtenerCalificacion(comentarios);
+      }
+
+      localStorage.setItem(
+        CACHE_KEY,
+        JSON.stringify({
+          timestamp: Date.now(),
+          items: nuevos
+        })
+      );
+
+      document.getElementById("featured-cache-info").textContent =
+        "Actualizado ahora";
+
+      return nuevos;
     }
 
-    document.getElementById('next-slide').addEventListener('click', nextSlide);
-    document.getElementById('prev-slide').addEventListener('click', prevSlide);
+    if (!productosTop4) {
+      productosTop4 = await recalcular();
+    }
 
-    dots.forEach((dot, index) => {
-      dot.addEventListener('click', () => showSlide(index));
-    });
+    // BOTÓN RE-CALCULAR
+    const btn = document.getElementById("recalc-featured");
+    btn.onclick = async () => {
+      btn.disabled = true;
+      btn.textContent = "Recalculando...";
+      const nuevos = await recalcular();
+      await renderizar(nuevos);
+      btn.disabled = false;
+      btn.textContent = "Recalcular ahora";
+    };
 
-    // Auto-play
-    setInterval(nextSlide, 5000);
 
-    // BÚSQUEDA
-    const searchToggle = document.getElementById('search-toggle');
-    const searchContainer = document.getElementById('search-container');
-    const searchInput = document.getElementById('search-input');
-    
-    searchToggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isExpanded = searchContainer.classList.contains('expanded');
-      
-      if (!isExpanded) {
-        searchContainer.classList.add('expanded');
-        setTimeout(() => searchInput.focus(), 400);
-      } else if (searchInput.value === '') {
-        searchContainer.classList.remove('expanded');
+    /* ------ RENDER ------ */
+
+    async function renderizar(lista) {
+      contenedor.innerHTML = "";
+
+      while (lista.length < 4) {
+        lista.push({
+          id: "placeholder",
+          name: "Próximamente",
+          description: "",
+          cost: "--",
+          soldCount: 0,
+          image: imagenesFondo[lista.length],
+          _comentarios: [],
+          _puntuacion: 0
+        });
       }
-    });
 
-    searchInput.addEventListener('blur', () => {
-      if (searchInput.value === '') {
-        setTimeout(() => {
-          searchContainer.classList.remove('expanded');
-        }, 200);
-      }
-    });
+      for (let i = 0; i < 4; i++) {
+        const p = lista[i];
+        const fondo = imagenesFondo[i];
+        const estrellas = generarEstrellas(p._puntuacion);
+        const comentariosCortos = p._comentarios.slice(0, 2);
 
-    document.addEventListener('click', (e) => {
-      if (!searchContainer.contains(e.target) && searchInput.value === '') {
-        searchContainer.classList.remove('expanded');
-      }
-    });
+        const panel = document.createElement("section");
+        panel.className = "featured-panel";
+        panel.style.backgroundImage =
+          `linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.6)), url("${fondo}")`;
 
-    // MODO OSCURO
-    const darkModeBtn = document.getElementById('dark-mode-btn');
-    darkModeBtn.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      const icon = darkModeBtn.querySelector('.material-symbols-outlined');
-      icon.textContent = document.body.classList.contains('dark') ? 'light_mode' : 'dark_mode';
-    });
+        panel.innerHTML = `
+          <div class="panel-inner">
 
-    // FAVORITOS
-    const favBtn = document.getElementById('fav-btn');
-    const favIcon = document.getElementById('fav-icon');
-    let favActive = false;
-    
-    favBtn.addEventListener('click', () => {
-      favActive = !favActive;
-      favIcon.textContent = favActive ? 'favorite' : 'favorite_border';
-    });
+            <div class="panel-left">
+              <h3 class="title">${p.name}</h3>
+              <div class="subtitle">${p.currency || ""} ${p.cost} • Vendidos: ${p.soldCount}</div>
+              <div class="desc">${p.description?.slice(0, 240) || ""}</div>
 
-    // MENÚ PERFIL
-    const profileBtn = document.getElementById('profile-btn');
-    const profileMenu = document.getElementById('profile-menu');
-    
-    profileBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      profileMenu.classList.toggle('active');
-    });
+              <div class="meta-row">
+                <div class="rating-stars">${estrellas}</div>
+                <div class="rating-info">(${p._puntuacion}/5)</div>
+                <div class="tag">Popular</div>
+                <div class="tag">Envío rápido</div>
+              </div>
 
-    document.addEventListener('click', () => {
-      profileMenu.classList.remove('active');
-    });
+              <div class="comments">
+                ${
+                  comentariosCortos.length === 0
+                    ? `<div class="comment muted">Sin comentarios aún.</div>`
+                    : comentariosCortos.map(
+                        c => `
+                  <div class="comment">
+                    <strong>${c.user}</strong>: 
+                    ${c.description.slice(0, 140)}${c.description.length > 140 ? "…" : ""}
+                  </div>
+                `
+                      ).join("")
+                }
+              </div>
+            </div>
 
-    // CARGAR CATEGORÍAS
-    async function loadCategories() {
-      const res = await fetch('https://japceibal.github.io/emercado-api/cats/cat.json');
-      const categories = await res.json();
-      const container = document.getElementById('categories-container');
-      container.innerHTML = "";
-      
-      categories.forEach(cat => {
-        container.innerHTML += `
-          <div class="category-card">
-            <img src="img/cat${cat.id}_1.jpg" alt="${cat.name}">
-            <h3>${cat.name}</h3>
+            <div class="panel-right">
+              <div class="secondary-img"
+                   style="background-image:url('${p.image || fondo}')"></div>
+
+              <button class="btn-primary" data-id="${p.id}">
+                Ver producto
+              </button>
+            </div>
+
           </div>
         `;
-      });
-    }
 
-    // HELPERS API
-    async function obtenerCategorias() {
-      const res = await fetch("https://japceibal.github.io/emercado-api/cats/cat.json");
-      return await res.json();
-    }
+        panel.querySelector(".btn-primary").onclick = () => {
+          localStorage.setItem("productId", p.id);
+          window.location.href = "product-info.html";
+        };
 
-    async function obtenerProductosDeCategoria(catID) {
-      const res = await fetch(`https://japceibal.github.io/emercado-api/cats_products/${catID}.json`);
-      const data = await res.json();
-      return data.products;
-    }
-
-    async function obtenerComentarios(id) {
-      const res = await fetch(`https://japceibal.github.io/emercado-api/products_comments/${id}.json`);
-      return await res.json();
-    }
-
-    function obtenerCalificacion(comments) {
-      if (comments.length === 0) return 0;
-      let sum = 0;
-      comments.forEach(c => sum += c.score);
-      return Math.round(sum / comments.length);
-    }
-
-    function generarEstrellas(score) {
-      return "★".repeat(score) + "☆".repeat(5 - score);
-    }
-
-    // CALCULAR MÁS VENDIDOS - SOLO TOP 4
-    async function calcularMasVendidos() {
-      const categorias = await obtenerCategorias();
-      const top3 = categorias.slice(0, 3);
-
-      let productos = [];
-
-      for (const cat of top3) {
-        const prods = await obtenerProductosDeCategoria(cat.id);
-        productos = productos.concat(prods);
+        contenedor.appendChild(panel);
       }
-
-      productos.sort((a, b) => b.soldCount - a.soldCount);
-
-      return productos.slice(0, 4);
     }
 
-    // CARGAR PRODUCTOS DESTACADOS CON ESTILO STITCH
-// CARGAR PRODUCTOS DESTACADOS — ESTILO STITCH
-async function loadFeaturedProducts() {
-  const container = document.getElementById('featured-products');
-  container.innerHTML = "";
-
-  const top4 = await calcularMasVendidos();
-
-  for (const p of top4) {
-    const comentarios = await obtenerComentarios(p.id);
-    const rating = obtenerCalificacion(comentarios);
-    const estrellas = generarEstrellas(rating);
-
-    container.innerHTML += `
-      <div class="product-card">
-        <div class="product-image-wrapper">
-          <img class="product-image" src="${p.image}" alt="${p.name}">
-        </div>
-
-        <div class="product-info">
-          <h3 class="product-title">${p.name}</h3>
-          <p class="product-description">${p.description}</p>
-
-          <p class="product-price">${p.currency} ${p.cost}</p>
-
-          <p class="product-stats">Vendidos: ${p.soldCount}</p>
-
-          <div class="product-rating">
-            ${estrellas} 
-            <span class="product-rating-info">(${rating}/5)</span>
-          </div>
-        </div>
-      </div>
-    `;
+    await renderizar(productosTop4);
   }
-}
 
-    // CARGAR AL INICIO
-    loadCategories();
-    loadFeaturedProducts();
+  cargarProductosDestacados();
 
-    // CART COUNT
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    document.getElementById('cart-count').textContent = cart.length;
 });
