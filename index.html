@@ -15,7 +15,7 @@
   <!-- ================== HEADER ================== -->
   <header>
     <!-- ================ NAV ================== -->
-    <nav>
+    <nav class="navbar">
       <div class="logo">
         <a href="index.html"></a>
       </div>
@@ -88,60 +88,58 @@
 
         <!-- ACCIONES DEL USUARIO -->
 
-      <ul class="nav-actions">
+      <div class="nav-actions">
         <!-- Botón del buscador -->
-        <li class="nav-search">
-          <form method="get" action="/buscar">
-            <input type="search" id="search-input" name="q" placeholder="Buscar">
-              <button type="submit" class="btn-icon"> 
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search">
-                    <path d="m21 21-4.34-4.34" />
-                    <circle cx="9.5"ircle cx="11" cy="11" r="8" />
-                  </svg>
-              </button>
-          </form>
-        </li>        
+        <form method="get" action="/buscar" class="nav-search">
+          <input type="search" id="search-input" name="q" placeholder="Buscar">
+            <button type="submit" class="btn-icon"> 
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search">
+                <path d="m21 21-4.34-4.34" />
+                <circle cx="11" cy="11" r="8" />
+              </svg>
+             </button>
+        </form>   
 
-          <!-- Botón de favoritos -->
-        <li>
-          <a href="favorites.html" class="btn-icon"> 
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart-icon lucide-heart">
-              <path
-              d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
-            </svg> 
-          </a>
-        </li>
+        <!-- Botón de favoritos -->
+        <ul class="nav-icons">
+          <li>
+            <a href="favorites.html" class="btn-icon"> 
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart-icon lucide-heart">
+               <path
+                d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
+             </svg> 
+           </a>
+          </li>
 
           <!-- Botón del carrito -->
-        <li>
-          <a href="cart.html" class="btn-icon">
-            <!-- Este botón mostraria una ventana al costado con los items -->
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-              viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-              stroke-linejoin="round" class="lucide lucide-shopping-cart-icon lucide-shopping-cart">
-              <circle cx="8" cy="21" r="1" />
-              <circle cx="19" cy="21" r="1" />
-              <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
-            </svg>
-          </a>
-        </li>
-      </ul>
-
+          <li>
+            <a href="cart.html" class="btn-icon">
+              <!-- Este botón mostraria una ventana al costado con los items -->
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+               stroke-linejoin="round" class="lucide lucide-shopping-cart-icon lucide-shopping-cart">
+                <circle cx="8" cy="21" r="1" />
+                <circle cx="19" cy="21" r="1" />
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+              </svg>
+            </a>
+          </li>
+        </ul>
+      </div> 
         <!-- Botón de perfil -->
       <div class="profile-menu-container">
-        <button id="btn-profile" class="btn-icon">
+        <button id="btn-profile" class="btn-icon"></button>
           <ul id="menu-profile">
             <li><a href="my-profile.html">Mi Perfil</a></li>
             <li><a href="config.html">Configuracion</a></li>
-            <li><p>Aqui va el botón Cerrar Sesión</p></li>
+            <li><button type="button" id="btn-logout">Cerrar Sesión</button></li>
           </ul>
-        </button>
-      </div>
+        </div>
     </nav>
     <!-- ================ /NAV ================== -->
   </header>
@@ -193,6 +191,8 @@
   <script src="js/bootstrap.bundle.min.js"></script>
   <script src="js/index.js"></script>
   <script src="js/init.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/dark-mode.js"></script>
   <!-- ================ /FIN ================== -->
 </body>
 
